@@ -1,0 +1,140 @@
+<html ng-app="webMusicas">
+	<head>
+		<title> Laboratório de SI </title>
+		<script src="lib/angular.min.js"></script>
+		<script src="lib/angularTeste.js"></script>
+
+	</head>
+	<body ng-controller="webMusicasController">
+	 
+
+		 <form ng-submit="adicionarArtista(novoArtista)">
+		 	<label for="nome artista"> Nome artista </label>
+		 	<input type="text" id="nome_artista" ng-model="novoArtista">
+		 	<button type="reset"> Limpar </button>
+		 	<button type="submit"> Adicionar artista </button>
+		 </form>
+
+		 <form ng-submit="adicionarMusica(novaMusica)" align="right">
+		 	<label for="nome_musica"> Nome da musica</label>
+		 	<input type="text" ng-model="novaMusica.nome">
+		 	<label for="nome_album"> Nome do album </label>
+		 	<input type="text" ng-model="novaMusica.album">
+		 	<label for="artista_musica"> Artista da musica </label>
+		 	<input type="text" ng-model="novaMusica.artista">
+		 	<label for="ano_lancamento_musica"> Ano de lancamento </label>
+		 	<input type="year" ng-model="novaMusica.anoLancamento">
+		 	<label for="duracao_musica"> Duracao da musica </label>
+		 	<input type="text" ng-model="novaMusica.duracao">
+		 	<button type="submit"> Adicionar musica </button>
+		 </form>
+
+		 <form ng-submit="adicionarPlaylist(nomePlaylist)" align="center">
+		 	<label for="nome_playList"> Nome da playlist </label>
+		 	<input type="text" ng-model="nomePlaylist">
+		 	<button type="submit"> Adicionar playlist </button>
+		 </form>
+
+		 <form ng-submit="listarAlbums(nomeArtista)">
+		 	<label for="nome_artista"> Nome do artista </label>
+		 	<input type="text" ng-model="nomeArtista">
+		 	<button type="submit"> Pesquisar artista</button>
+		 </form>
+		
+		<p ng-if="openArtistas">
+		 <table>
+		 	<tr ng-repeat="artista in artistas | filter: nomeArtista">
+		 		<td ng-click="listarAlbums(artista.nome)">--> {{artista.nome}}</td>
+		 	</tr>
+		 </table>
+		 	<table>
+		 		<tr ng-repeat="album in albums" ng-show="album.artista == openAlbum" >
+		 			<td> {{album.nome}}</td>
+		 		</tr>
+		 	</table>
+		 </p>
+		 <!--
+		 <form ng-submit="listarMusicas(nomeMusica)">
+		 	<label for="nome_musica"> Nome da musica </label>
+		 	<input type="text" ng-model="nomeMusica">
+		 	<button type="submit"> Pesquisar musica</button>
+		 </form>
+
+		 <table>
+		 	<tr ng-repeat="playlist in playlists">
+		 		<td>{{playlist.nome}}</td>
+		 	</tr>
+		 </table>
+
+		 <p ng-if="listarMusicas(nomeMusica)">
+		 	<table>
+		 		<tr ng-repeat="musica in listaMusicas">
+		 			<td>{{musicas.nome}}</td>
+		 			<td>{{musica.album}}</td>
+		 			<td>{{musica.artista}}</td>	
+		 		</tr>
+		 	</table>
+		 </p>
+		-->
+		 <div>
+		 	<label> <b> Playlistas </b></label>
+		 	<div ng-repeat="playlist in playlists">
+		 		<div ng-click="exibirMusicasPlaylists(playlist.nome)"> --> {{playlist.nome}}</div>
+		 		<button ng-click="removerPlaylist(playlist)">excluir playlist</button>
+		 	</div>
+		 </div>
+		 <p ng-if="exibirMusica">
+		 		<div ng-repeat="playlist in playlists" ng-show="playlist.nome == musicasPlaylist">
+		 			<div ng-repeat="musica in playlist.musicas">
+		 				<div>{{musica.nome}}</div>
+		 				<button ng-click="removerMusicaPlaylist(musica, playlist)" title="excluir musica">excluir musica</button>
+		 			</div>
+		 		</div>		 
+		 </p>
+		 <table>
+		 	<label><b> albums </b> </label>
+		 	<tr ng-repeat="album in albums">
+		 		<td> --> {{album.nome}}</td>
+		 	</tr>
+		 </table>
+		 <table>
+		 	<label> <b> artistas </b> </label>
+		 	<tr ng-repeat="artista in artistas">
+		 		<td> --> {{artista.nome}}</td>
+		 	</tr>
+		 </table>
+		 <div>
+		 	<label> <b> musica </b> </label>
+		 	<div ng-repeat="musica in musicas">
+		 		<div ng-click="exibirPlaylists(musica)"> --> {{musica.nome}}</div>
+		 		<div> --> {{musica.artista}}</div>
+		 		<button ng-click="removerMusica(musica)">excluir musica</button>
+		 	</div>
+		 </div>
+
+		 <p ng-if="exibirPlaylist">
+		 	<label> listas de playlists para adicionar </label>
+		 		<table>
+		 			<tr ng-repeat="playlist in playlists">
+		 				<td ng-click="adicionarNaPlaylist(musicaAddPlaylist, playlist)"> --> {{playlist.nome}}</td>
+		 			</tr>
+		 		</table>
+		 </p>	
+
+		 <table>
+		 	<label> <b> tornar artistas preferidos </b> </label>
+		 	<tr ng-repeat="artista in artistas">
+		 		<td ng-click="adicionarArtistaFavorito(artista.nome)"> --> {{artista.nome}}</td>
+		 	</tr>
+		 </table>
+		 <div>
+		 	<label> <b> lista artistas preferidos </b> </label>
+		 	<div ng-repeat="artista in artistas" ng-show="artista.favorito == true">
+		 		<p> --> {{artista.nome}}</p>
+		 		<button ng-click="removerArtistaFavorito(artista.nome)" title="excluir"></button>
+		 	<div>
+		 </div>
+	
+	</body>
+
+</html>
